@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WS Test</title>
+</head>
+<body>
+    <h1>Native WebSocket Test</h1>
+    <div id="messages"></div>
+    <script>
+        // *** 請將這裡換成您自己的 wss:// 網址 ***
+        const WSS_URL = "wss://line-ordering-backend-199532894970.asia-east1.run.app";
+        
+        const messagesDiv = document.getElementById('messages');
+        
+        console.log("Attempting to connect to:", WSS_URL);
+        messagesDiv.innerHTML += `<p>正在連線至 ${WSS_URL}...</p>`;
+
+        const ws = new WebSocket(WSS_URL);
+
+        ws.onopen = function() {
+            console.log("WebSocket connection established!");
+            messagesDiv.innerHTML += '<p style="color: green;">✅ 連線成功！</p>';
+        };
+
+        ws.onmessage = function(event) {
+            console.log("Message from server:", event.data);
+            const data = JSON.parse(event.data);
+            messagesDiv.innerHTML += `<p style="color: blue;">🔥 收到新訊息:</p><pre>${JSON.stringify(data, null, 2)}</pre>`;
+        };
+
+        ws.onclose = function(event) {
+            console.log("WebSocket connection closed:", event);
+            messagesDiv.innerHTML += `<p style="color: red;">❌ 連線關閉 (Code: ${event.code})</p>`;
+        };
+
+        ws.onerror = function(error) {
+            console.error("WebSocket Error:", error);
+            messagesDiv.innerHTML += `<p style="color: red;">❌ 發生錯誤！</p>`;
+        };
+    </script>
+</body>
+</html>

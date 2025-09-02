@@ -1,0 +1,315 @@
+/* 版面置中與寬度 */
+html {
+  padding: 0px 0 20px 0;
+  margin: 0;
+}
+body {
+  padding: 0;
+  margin: 0;
+  background: url(bk.jpg) repeat;
+  background-size: 30%;
+  font-family: 'Poppins', 'Noto Sans TC', sans-serif;
+  font-size:16px}
+.time-select { font-size:16px; padding:10px 12px; border-radius:8px; }
+.page {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 0;
+}
+.wrap {
+  width: min(100%, 960px);
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid #1f2937;
+  border-radius: 16px;
+  border-radius: 16px;
+  border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
+  padding: 16px;
+  backdrop-filter: blur(6px); 
+  -webkit-backdrop-filter: blur(6px); /* Safari 相容 */
+}
+
+.grid {
+  display: grid;
+  gap: 12px;
+}
+.grid-2 {
+  grid-template-columns: 1fr;
+}
+@media (min-width: 720px) {
+  .grid-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+label {
+  display: block;
+  font-size: 16px;
+  color: #111111;
+  margin-bottom: 6px;
+}
+input[type='text'],
+input[type='tel'], input#pickup-date, select#pickup-hour, select#pickup-minute {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 3px 8px;margin:1px 0;
+    font-size: 1em;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid #1f2937;
+    background: #ffffff;
+    color: #292929;
+}
+header {
+  background-color: #fff;
+  border: 2px solid #1f2937;
+  height: 250px;
+  width:auto; margin-top:0px;
+  display: block;
+}
+header .img {
+  background: url(/src/assets/bg.png) no-repeat;
+  width: 320px;
+  height: 320px;
+  background-size: 100%;
+  position: absolute;
+  right: 13%;
+  top: 10px;
+  z-index: 55;
+}
+.hint{float:right;color:#2a4047;font-size:0.8em}
+.menu {
+  border: 1px dashed #1f2937;
+  border-radius: 14px;
+  padding: 12px;
+  margin-top: 8px;
+  background: #ffffff;
+}
+.menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.receveNum{font-size:1.5em; color:#81b5ff}
+.item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid #1f2937;
+}
+.item:first-child {
+  border-top: 0;
+}
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.qty {
+  min-width: 36px;
+  text-align: center;
+}
+.btn {
+  border: 1px solid #1f2937;
+  background: #739e38;
+  color: #e5e7eb;
+  padding: 8px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.btn:hover {
+  border-color: #22d3ee;
+}
+.btn.icon {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+}
+.btn.primary {
+    background: linear-gradient(180deg, #000000, #000000);
+    color: #ffffff;
+    border: 2px solid #000000;
+    padding: 5px 30px;
+    border-radius: 45px;
+}
+.btn.primary[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.btn.send {
+  font-size: 1.3em;
+}
+.total {
+  display: flex;
+  justify-content: flex-end;
+  color: #8a3100;
+  margin-top: 8px;font-size: 1.2em;
+}
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30px;
+}
+.price {
+  color: #003e95;
+  margin-left: 6px;
+  font-size: 1.2em;
+}
+.diamond {
+  --s: 10px;
+  margin-right: 10px;
+  display: inline-block;
+  width: var(--s);
+  height: var(--s);
+  background: #f22424; 
+  transform: rotate(45deg);
+  vertical-align: middle;
+  margin-left: 6px;
+  border-radius: 1px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+/* Modal */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index:555;
+}
+.overlay.show {
+  display: flex;
+}
+.modal {
+  color: #fff;
+  background: #0b1220;
+  border: 1px solid #1f2937;
+  border-radius: 16px;
+  max-width: 420px;
+  width: 100%;
+  padding: 18px;
+}
+.modal h3 {
+  margin: 0 0 8px;
+}
+.modal p {
+  margin: 0 0 14px;
+  color: #ffe9a3;
+}
+.modal .scroll {
+  max-height: 160px;
+  overflow: auto;
+  border-top: 1px solid #1f2937;
+  padding-top: 8px;
+  margin-top: 8px;
+}
+.modal .mb {
+  margin-bottom: 8px;
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 14px;
+}
+.modal-actions button{
+  background:#518c00; 
+  border:2px solid #fff; font-size:1.2em;color:#fff; padding:2px 15px;}
+
+/* 視覺語彙 */
+header h1 {
+  font-size: clamp(20px, 3.5vw, 28px);
+  margin: 0 0 12px;
+  letter-spacing: 1px;
+  padding: 20px 30px;
+}
+header p {
+  margin: 0;
+  color: #282828;
+  padding: 0 0 10px 30px;
+  font-size: 1.1em;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.top-nav { display: flex; 
+    background: rgba(255, 255, 255, 0.8);
+    width:100%; margin:0px auto; max-width:960px;
+    justify-content: center;
+    border-radius: 0px; box-sizing: border-box; margin-bottom:5px;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.3));
+    backdrop-filter: blur(6px); padding:16px 0;
+    -webkit-backdrop-filter: blur(6px); /* Safari 相容 */ }
+.top-nav a { text-decoration:none; margin:0 5px;border-radius:45px; padding:5px 20px; background:#739e38; color: #ffffff !important; font-weight: 600; }
+.top-nav a.router-link-active { position: relative;color: #fdfdff!important; background:#252525 }
+.top-nav a.router-link-active::before{
+    content: "";
+    display: block;
+    position: absolute;
+    top: -6px;
+    right: 5px;
+    height: 0px;
+    margin-right: 8px;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid black;
+    vertical-align: middle;
+}
+.top-nav a.router-link-active::after{
+    content: "";
+    display: block;
+    position: absolute;
+    top: -6px;
+    right: 20px;
+    height: 0px;
+    margin-right: 8px;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid black;
+    vertical-align: middle;
+}
+
+@media(max-width:720px){
+  html{padding:0 0 1% 0;}
+  body{font-size:0.9em}
+  header .img{ width: 150px; height: 150px; top: 50px;  right: 0%;}
+  header p{font-size:0.9em; padding:0 10px}
+  header h1{padding:20px 0 0 10px;}
+  header{height:160px;margin-top:0}
+  .page { width: 98%;margin:0 auto}
+  
+  /* 確保手機版取餐日期和時間選擇器寬度一致 */
+  #pickup-hour, #pickup-minute {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    max-width: none !important;
+    min-width: 0 !important;
+  }
+  /* 微調：日期輸入右側略縮，避免比小時下拉長一點點 */
+  #pickup-date { 
+    width: calc(100% - 12px) !important; 
+    box-sizing: border-box !important;
+    max-width: none !important;
+    min-width: 0 !important;
+  }
+}
+@media(min-width:1400px){
+  header .img{right:24%;}
+}
