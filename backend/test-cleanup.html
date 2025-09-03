@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>測試清理 API</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <h1>測試清理 API</h1>
+    <button onclick="testCleanup()">執行清理</button>
+    <div id="result"></div>
+
+    <script>
+        async function testCleanup() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '執行中...';
+            
+            try {
+                const response = await fetch('https://line-ordering-backend-199532894970-199532894970.asia-east1.run.app/api/admin/cleanup-expired', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                resultDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                resultDiv.innerHTML = `錯誤: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

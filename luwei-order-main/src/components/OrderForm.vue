@@ -152,7 +152,6 @@
             <div class="hint error" v-if="errors.items">{{ errors.items }}</div>
           </section>
 
-          <!-- 送出前錯誤區塊 -->
           <div v-if="errors.name || errors.phone || errors.pickupDate || errors.pickupTime || errors.items" class="form-errors" role="alert" aria-live="assertive">
             <ul>
               <li v-if="errors.name">{{ errors.name }}</li>
@@ -225,7 +224,6 @@ const form = reactive({
   phone: '',
   pickupDate: '',
   pickupTime: '',
-  // 新增時分下拉欄位
   pickupHour: '',
   pickupMinute: '',
   note: ''
@@ -284,7 +282,6 @@ const API_BASE_URL = window.API_BASE_URL || 'https://line-ordering-backend-19953
 const menu = ref([])
 const isLoadingMenu = ref(false)
 const menuError = ref('')
-// 移除 pickupTimeEl，因為不再需要
 
 async function loadMenu() {
   isLoadingMenu.value = true
@@ -293,7 +290,7 @@ async function loadMenu() {
     const res = await fetch(`${API_BASE_URL}/api/products`)
     if (!res.ok) throw new Error('載入菜單失敗')
     const products = await res.json() // [{ id, name, price }]
-    console.log('API 返回的商品數據:', products) // 調試用
+    console.log('API 返回的商品數據:', products) 
     menu.value = products.map(p => ({ 
       id: p.id, 
       name: p.name, 
@@ -301,7 +298,7 @@ async function loadMenu() {
       qty: 0,
       isAvailable: p.isAvailable !== false // 如果沒有 isAvailable 屬性，預設為 true
     }))
-    console.log('處理後的菜單數據:', menu.value) // 調試用
+    console.log('處理後的菜單數據:', menu.value) 
   } catch (e) {
     console.error(e)
     menuError.value = '菜單載入失敗，請稍後重試'
@@ -520,7 +517,6 @@ const minuteOptions = computed(() => {
 watch(
   () => [form.pickupDate, form.pickupHour, form.pickupMinute],
   () => {
-    // 若已選擇小時，但分鐘未選或不合法，預設為 '00'（若該小時允許）或取第一個可選分鐘
     if (form.pickupHour && (!form.pickupMinute || !minuteOptions.value.includes(form.pickupMinute))) {
       const defaultMinute = minuteOptions.value.includes('00')
         ? '00'
@@ -536,7 +532,6 @@ watch(
     }
     const hhmm = `${form.pickupHour}:${form.pickupMinute}`
     
-    // 分選項因小時切換而失效的情況 → 重置
     if (!minuteOptions.value.includes(form.pickupMinute)) {
       const fallbackMinute = minuteOptions.value.includes('00') ? '00' : (minuteOptions.value[0] || '')
       form.pickupMinute = fallbackMinute
@@ -670,9 +665,12 @@ async function queryOrders() {
     }
     const orders = await res.json()
     queryResults.value = orders
+    if (!Array.isArray(orders) || orders.length === 0) {
+      alert('查無訂單')
+    }
   } catch (e) {
     console.error(e)
-    queryError.value = '查詢失敗，請稍後再試。'
+    queryError.value = '不好意思，熊哥正在呼嚕嚕睡覺... 😴 訂單被它壓在下面了，請稍後再試！。'
     queryResults.value = []
   }
 }
@@ -969,13 +967,13 @@ async function queryOrders() {
   background-color: #f0f9ff;
   border: 1px solid #bae6fd;
   border-radius: 0.5rem;
-  color: #000000; /* 改為黑色 */
+  color: #000000; /* 黑色 */
 }
 
 .countdown-info p {
   margin: 0;
   font-size: 0.875rem;
-  color: #000000; /* 確保文字是黑色 */
+  color: #000000; 
 }
 
 .countdown-info strong {

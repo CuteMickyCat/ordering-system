@@ -8,7 +8,7 @@
     </header>
 
     <section class="story card holiday">
-      <h2>每月休假公告</h2>
+      <h2>休假公告</h2>
       <p class="note">以下為本月預定公休日，若遇臨時調整會於此更新，敬請見諒。</p>
       <ul class="holiday-list">
         <li v-for="h in holidays" :key="h.date + (h.id || '')">
@@ -45,7 +45,6 @@
       </ul>
     </section>
 
-    <!-- 題材故事：鬼殺隊小劇場（同時納入「故事緣起」內容） -->
     <section class="card demon-slayer">
       <h2>小劇場｜鬼殺隊的深夜滷味</h2>
       <div class="demon-row">
@@ -128,11 +127,11 @@ onMounted(loadHolidays)
   text-align: left; 
   padding: 3rem 1rem; 
   background-repeat: no-repeat; 
-  background-position: right center; /* 背景靠右 */
-  background-size: 36% auto; /* 縮小一點點 */
+  background-position: right center; 
+  background-size: 36% auto; 
   overflow: hidden;
 }
-/* 細緻的左側到透明的橫向漸層，提升文字可讀性，但不壓畫面 */
+
 .hero::before {
   content: '';
   position: absolute; inset: 0;
@@ -165,8 +164,8 @@ onMounted(loadHolidays)
 
 @media (max-width: 640px) {
   .hero {
-    padding: 0; /* 略增上方空白避免切到標題 */
-    overflow: visible; /* 避免被裁切 */
+    padding: 0; 
+    overflow: visible; 
     background-size: contain;
   }
   .hero p{width:48%;}

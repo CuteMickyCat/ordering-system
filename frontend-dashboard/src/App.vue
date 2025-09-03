@@ -5,7 +5,6 @@ const newOrders = ref([]);
 const inProgressOrders = ref([]);
 const completedOrders = ref([]);
 const archivedOrders = ref([]);
-// 心跳：用於觸發倒數重新計算
 const countdownTick = ref(0);
 let tickTimer;
 function toYMD(date) {
@@ -355,14 +354,15 @@ async function fetchOrdersByPhone() {
       const endMs = new Date(`${rangeEnd.value}T23:59:59`).getTime();
       list = list.filter(o => o.createdAt && o.createdAt.getTime() <= endMs);
     }
-    // 僅歷史（已完成歸檔）
     list = list.filter(o => o.status === 'ARCHIVED');
-    // 依電話匹配（去空白）
     const q = raw.replace(/\s+/g, '');
     phoneOrders.value = list.filter(o => String(o.customerPhone || '').replace(/\s+/g, '').includes(q));
+    if (phoneOrders.value.length === 0) {
+      alert('歐歐找不到訂單，請稍後再試');
+    }
   } catch (e) {
     console.error('依電話查詢訂單失敗', e);
-    phoneQueryError.value = '查詢失敗，請稍後再試';
+    phoneQueryError.value = '歐歐找不到訂單，請稍後再試';
   } finally {
     isLoadingPhoneOrders.value = false;
   }

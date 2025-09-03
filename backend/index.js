@@ -449,6 +449,8 @@ app.post('/api/orders', async (req, res) => {
         totalPrice: calculatedTotalPrice, 
         status: 'PENDING', 
         createdAt: new Date(), 
+        // TTL: 90 天後自動刪除（需在 Firestore 後台啟用 TTL，指定 deleteAt 欄位）
+        deleteAt: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
         orderNumber: orderNumber, 
         notes: combinedNotes,
         isPrinted: false,
@@ -525,6 +527,60 @@ app.get('/api/orders/archived', async (req, res) => {
   } catch (error) {
     console.error('Error fetching archived orders:', error);
     res.status(500).send('Error fetching archived orders');
+  }
+});
+
+// Admin: 遞迴清理過期（>90天）且已封存的訂單及其子集合
+app.post('/api/admin/cleanup-expired', async (req, res) => {
+  try {
+    const cutoff = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
+    // 先以狀態查，再在記憶體過濾 createdAt（避免複合索引）
+    const snap = await db.collection('orders').where('status', '==', 'ARCHIVED').get();
+    const toDelete = [];
+    for (const doc of snap.docs) {
+      const data = doc.data();
+      let createdAt;
+      if (typeof data?.createdAt?.toDate === 'function') {
+        try { createdAt = data.createdAt.toDate(); } catch { createdAt = undefined; }
+      } else if (typeof data?.createdAt?._seconds === 'number') {
+        createdAt = new Date(data.createdAt._seconds * 1000);
+      } else if (typeof data?.createdAt?.seconds === 'number') {
+        createdAt = new Date(data.createdAt.seconds * 1000);
+      } else if (data?.createdAt) {
+        const d = new Date(data.createdAt); createdAt = isNaN(d.getTime()) ? undefined : d;
+      }
+      if (createdAt && createdAt < cutoff) {
+        toDelete.push(doc.ref);
+      }
+    }
+
+    // 逐一遞迴刪除（避免一次性過量）
+    let success = 0;
+    let failed = 0;
+    for (const ref of toDelete) {
+      try {
+        // 使用 Admin SDK 的遞迴刪除 API（需 Node 10+ 且 firebase-admin v9+）
+        if (typeof admin.firestore().recursiveDelete === 'function') {
+          await admin.firestore().recursiveDelete(ref);
+        } else {
+          // 後備方案：先刪子集合 items，再刪主文件
+          const itemsSnap = await ref.collection('items').get();
+          const batch = db.batch();
+          itemsSnap.forEach(d => batch.delete(d.ref));
+          await batch.commit();
+          await ref.delete();
+        }
+        success++;
+      } catch (e) {
+        console.error('遞迴刪除失敗', ref.path, e);
+        failed++;
+      }
+    }
+
+    res.status(200).json({ requested: toDelete.length, success, failed });
+  } catch (e) {
+    console.error('清理過期訂單失敗', e);
+    res.status(500).json({ error: 'cleanup_failed', message: String(e?.message || e) });
   }
 });
 
